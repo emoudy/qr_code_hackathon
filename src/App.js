@@ -4,11 +4,14 @@ import styled from "styled-components";
 
 const Container = styled.div`
   border-radius: 5px;
-  background-color: #f2f2f2;
   padding: 20px;
   max-width: 500px;
   margin: auto;
 `;
+
+// const StyledImage = styled.img`
+//   max-width="450";
+// `;
 
 const Button = styled.button `
   width: 100%;
@@ -73,7 +76,7 @@ const App = () => {
   }
     return (
         <Container>
-            <img src="./conversica-logo.png" alt="Conversica Logo" width="450" ></img>
+            <img src="./conversica-logo.png" alt="Conversica Logo" width="350" />
             <form className='form' onSubmit={handleSubmit}>
                 <div className='form-control'>
                     <label htmlFor='name'>Name: </label>
