@@ -1,7 +1,7 @@
 import React,  {useState} from 'react';
 
 const App = () => {
-  const [details, setDetails] = useState({ name: '', emai: '', phone: ''});
+  const [details, setDetails] = useState({ name: '', email: '', phone: ''});
 
   const handleSubmit = event => {
     console.log('handleSubmit ran');
