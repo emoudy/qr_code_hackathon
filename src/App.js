@@ -6,16 +6,21 @@ const Container = styled.div`
   border-radius: 5px;
   background-color: #f2f2f2;
   padding: 20px;
+  max-width: 500px;
+  margin: auto;
 `;
 
 const Button = styled.button `
-  cursor: pointer;
+  width: 100%;
+  background-color: #009fe0;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
   border-radius: 4px;
-  background: #e0e1e2 none;
-  color: #999;
+  cursor: pointer;
   &:hover {
     background-color: #025c82;
-    color: #fff;
   }
 `;
 
@@ -68,6 +73,7 @@ const App = () => {
   }
     return (
         <Container>
+            <img src="./conversica-logo.png" alt="Conversica Logo" width="450" ></img>
             <form className='form' onSubmit={handleSubmit}>
                 <div className='form-control'>
                     <label htmlFor='name'>Name: </label>
