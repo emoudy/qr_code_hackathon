@@ -8,8 +8,9 @@ const App = () => {
 
   const handleSubmit = event => {
     event.preventDefault();
-    console.log("details", details)
+    const urlString = new URLSearchParams(window.location.search).get('token');
     setDetails({ fullName: null, email: null, phone: null});
+    console.log({...details, token: urlString})
   }
 
   const checkValidation = () => {
