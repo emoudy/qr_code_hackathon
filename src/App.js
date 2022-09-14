@@ -7,7 +7,7 @@ const App = () => {
     console.log('handleSubmit ran');
     event.preventDefault();
     console.log("details", details)
-    setName('');
+    setDetails('');
   }
   
     return (
