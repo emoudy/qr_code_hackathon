@@ -104,7 +104,7 @@ const App = () => {
                         value={details.phone}
                     />
                 </div>
-                <Button type='submit' disabled={!isComplete}>Add person</Button>
+                <Button type='submit' disabled={!isComplete}>Register</Button>
             </form>
         </Container>
   );
