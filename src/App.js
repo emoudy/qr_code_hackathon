@@ -1,12 +1,12 @@
 import React,  {useState} from 'react';
 
 const App = () => {
-  const [name, setName] = useState('');
+  const [details, setDetails] = useState({ name: '', emai: '', phone: ''});
 
   const handleSubmit = event => {
     console.log('handleSubmit ran');
     event.preventDefault();
-    console.log("name", name)
+    console.log("details", details)
     setName('');
   }
   
@@ -19,20 +19,24 @@ const App = () => {
                         type='text'
                         id='name'
                         name='name'
-                        onChange={event => setName(event.target.value)}
-                        value={name}
+                        onChange={event => setDetails({...details, name: event.target.value})}
+                        value={details.name}
                     />
                     <label htmlFor='email'>Email: </label>
                     <input
                         type='text'
                         id='email'
                         name='email'
+                        onChange={event => setDetails({...details, email: event.target.value})}
+                        value={details.email}
                     />
                     <label htmlFor='phone'>Phone: </label>
                     <input
                         type='text'
                         id='phone'
                         name='phone'
+                        onChange={event => setDetails({...details, phone: event.target.value})}
+                        value={details.phone}
                     />
                 </div>
                 <button type='submit' onSubmit={handleSubmit}>Add person</button>
