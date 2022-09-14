@@ -1,5 +1,33 @@
 import userEvent from '@testing-library/user-event';
 import React,  {useState, useEffect} from 'react';
+import styled from "styled-components";
+
+const Container = styled.div`
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+`;
+
+const Button = styled.button `
+  cursor: pointer;
+  border-radius: 4px;
+  background: #e0e1e2 none;
+  color: #999;
+  &:hover {
+    background-color: #025c82;
+    color: #fff;
+  }
+`;
+
+const StyledInput = styled.input `
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+`;
 
 const App = () => {
   const [details, setDetails] = useState({ fullName: null, email: null, phone: null});
@@ -39,11 +67,11 @@ const App = () => {
     }
   }
     return (
-        <div>
+        <Container>
             <form className='form' onSubmit={handleSubmit}>
                 <div className='form-control'>
                     <label htmlFor='name'>Name: </label>
-                    <input
+                    <StyledInput
                         type='text'
                         id='name'
                         name='fullName'
@@ -51,7 +79,7 @@ const App = () => {
                         value={details.fullName}
                     />
                     <label htmlFor='email'>Email: </label>
-                    <input
+                    <StyledInput
                         type='text'
                         id='email'
                         name='email'
@@ -59,7 +87,7 @@ const App = () => {
                         value={details.email}
                     />
                     <label htmlFor='phone'>Phone: </label>
-                    <input
+                    <StyledInput
                         type='text'
                         id='phone'
                         name='phone'
@@ -67,9 +95,9 @@ const App = () => {
                         value={details.phone}
                     />
                 </div>
-                <button type='submit' disabled={!isComplete}>Add person</button>
+                <Button type='submit' disabled={!isComplete}>Add person</Button>
             </form>
-        </div>
+        </Container>
   );
 };
 
