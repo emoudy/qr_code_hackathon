@@ -38,19 +38,21 @@ const StyledInput = styled.input `
 `;
 
 const App = () => {
-  const [details, setDetails] = useState({ fullName: null, email: null, phone: null});
+  const [details, setDetails] = useState({ firstName: '', lastName: '', email: '', phone: ''});
   const [isComplete, setIsComplete] = useState(false);
-  const [error, setError] = useState('')
+  const [error, setError] = useState({firstName: false, email: false})
 
   const handleSubmit = event => {
     event.preventDefault();
     const urlString = new URLSearchParams(window.location.search).get('token');
-    setDetails({ fullName: null, email: null, phone: null});
+    setDetails({ firstName: '', lastName: '', email: '', phone: ''});
     console.log({...details, token: urlString})
   }
 
   const checkValidation = () => {
-    const validation = details.fullName !== null && details.email !== null && details.phone !== null;
+    details.firstName === '' && setError({...error, firstName: true})
+    details.email === '' && setError({...error, email: true})
+    const validation = details.firstName !== '' && details.email !== '';
     setIsComplete(validation)
   }
 
@@ -61,9 +63,12 @@ const App = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     switch (name) {
-      case 'fullName':
-        setDetails({ ...details, fullName: value === '' ? null : value });
+      case 'firstName':
+        setDetails({ ...details, firstName: value === '' ? null : value });
         break;
+      case 'lastName':
+          setDetails({ ...details, lastName: value === '' ? null : value });
+          break;
       case 'email':
         setDetails({ ...details, email: value === '' ? null : value});
         break;
@@ -79,13 +84,21 @@ const App = () => {
             <img src="./conversica-logo.png" alt="Conversica Logo" width="350" />
             <form className='form' onSubmit={handleSubmit}>
                 <div className='form-control'>
-                    <label htmlFor='name'>Name: </label>
+                    <label htmlFor='firstName'>First Name: </label>
                     <StyledInput
                         type='text'
-                        id='name'
-                        name='fullName'
+                        id='firstName'
+                        name='firstName'
                         onChange={handleChange}
-                        value={details.fullName}
+                        value={details.firstName}
+                    />
+                    <label htmlFor='lastName'>Last Name: </label>
+                    <StyledInput
+                        type='text'
+                        id='lastName'
+                        name='lastName'
+                        onChange={handleChange}
+                        value={details.lastName}
                     />
                     <label htmlFor='email'>Email: </label>
                     <StyledInput
