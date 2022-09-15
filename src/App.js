@@ -10,10 +10,6 @@ const Container = styled.div`
   margin: auto;
 `;
 
-// const StyledImage = styled.img`
-//   max-width="450";
-// `;
-
 const Button = styled.button `
   width: 100%;
   background-color: #009fe0;
@@ -38,8 +34,9 @@ const StyledInput = styled.input `
   box-sizing: border-box;
 `;
 
-const RequiredMessage = styled.div `
+const RequiredMessage = styled.span `
   color: red;
+  font-size: .8em;
 `;
 
 const SuccessMessage = styled.div `
@@ -53,30 +50,30 @@ const App = () => {
   const [error, setError] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
-  const handleSubmit = event => {
-    checkValidation();
-    event.preventDefault();
-    const urlString = new URLSearchParams(window.location.search).get('token');
-    const payload = {...details, token: urlString};
-    console.log("payload", payload);
-
-    console.log("error", error);
-  
-    !error && setSubmitSuccess(true);
-    isComplete && (
-      axios.post(`https://yii-client-uriel-mendoza.dev-conversica.com/dashboard/scandalous/savelead`, { payload })
-      .then(res => {
-        console.log(res);
-      })
-    );
-    !error && setDetails({ firstName: '', lastName: '', email: '', phone: ''});
-  }
-
   const checkValidation = () => {
-    (details.firstName === '' || details.email === '') 
+    (details.firstName == '' || details.email == '') 
       ? setError(true)
       : setError(false)
-    console.log("error", error);
+    return details.firstName == '' || details.email == '';
+  }
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    if(!checkValidation()) {
+      setSubmitSuccess(true);
+      sendRequest();
+    }
+  }
+
+  const sendRequest = () => {
+    const urlString = new URLSearchParams(window.location.search).get('token');
+    const payload = {...details, token: urlString};
+    console.log("payload error", payload, error);
+
+    axios.post(process.env.REACT_APP_FAKE_URL, { payload })
+    .then(res => {
+      console.log(res);
+    });
   }
 
   const handleChange = (e) => {
@@ -98,50 +95,53 @@ const App = () => {
         break;
     }
   }
-    return (
-        <Container>
-            <img src="./conversica-logo.png" alt="Conversica Logo" width="350" />
-            <form className='form' onSubmit={handleSubmit}>
-                <div className='form-control'>
-                    <label htmlFor='firstName'>First Name: </label>
-                    <StyledInput
-                        type='text'
-                        id='firstName'
-                        name='firstName'
-                        onChange={handleChange}
-                        value={details.firstName}
-                    />
-                    {error && <RequiredMessage>*Required</RequiredMessage>}
-                    <label htmlFor='lastName'>Last Name: </label>
-                    <StyledInput
-                        type='text'
-                        id='lastName'
-                        name='lastName'
-                        onChange={handleChange}
-                        value={details.lastName}
-                    />
-                    <label htmlFor='email'>Email: </label>
-                    <StyledInput
-                        type='text'
-                        id='email'
-                        name='email'
-                        onChange={handleChange}
-                        value={details.email}
-                    />
-                    {error && <RequiredMessage>*Required</RequiredMessage>}
-                    <label htmlFor='phone'>Phone: </label>
-                    <StyledInput
-                        type='text'
-                        id='phone'
-                        name='phone'
-                        onChange={event => setDetails({...details, phone: event.target.value=== '' ? null : event.target.value})}
-                        value={details.phone}
-                    />
-                </div>
-                <Button type='submit'>Register</Button>
-                {(submitSuccess && !error) && <SuccessMessage>Thank you for registering!</SuccessMessage>}
-            </form>
-        </Container>
+
+  useEffect(() => {
+    !error && setDetails({ firstName: '', lastName: '', email: '', phone: ''});
+  }, [error]);
+
+  return (
+      <Container>
+          <img src="./conversica-logo.png" alt="Conversica Logo" width="350" />
+          <form className='form' onSubmit={handleSubmit}>
+              <div className='form-control'>
+                  <label htmlFor='firstName'><div>First Name: {error && <RequiredMessage>*Required</RequiredMessage>}</div></label>
+                  <StyledInput
+                      type='text'
+                      id='firstName'
+                      name='firstName'
+                      onChange={handleChange}
+                      value={details.firstName}
+                  />
+                  <label htmlFor='lastName'>Last Name: </label>
+                  <StyledInput
+                      type='text'
+                      id='lastName'
+                      name='lastName'
+                      onChange={handleChange}
+                      value={details.lastName}
+                  />
+                  <label htmlFor='email'><div>Email: {error && <RequiredMessage>*Required</RequiredMessage>}</div></label>
+                  <StyledInput
+                      type='text'
+                      id='email'
+                      name='email'
+                      onChange={handleChange}
+                      value={details.email}
+                  />
+                  <label htmlFor='phone'>Phone: </label>
+                  <StyledInput
+                      type='text'
+                      id='phone'
+                      name='phone'
+                      onChange={event => setDetails({...details, phone: event.target.value=== '' ? null : event.target.value})}
+                      value={details.phone}
+                  />
+              </div>
+              <Button type='submit'>Register</Button>
+              {(submitSuccess && !error) && <SuccessMessage>Thank you for registering!</SuccessMessage>}
+          </form>
+      </Container>
   );
 };
 
