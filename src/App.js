@@ -38,48 +38,61 @@ const StyledInput = styled.input `
   box-sizing: border-box;
 `;
 
+const RequiredMessage = styled.div `
+  color: red;
+`;
+
+const SuccessMessage = styled.div `
+  color: #025c82;
+  text-align: center;
+  font-weight: bold; 
+`;
+
 const App = () => {
   const [details, setDetails] = useState({ firstName: '', lastName: '', email: '', phone: ''});
-  const [isComplete, setIsComplete] = useState(false);
-  const [error, setError] = useState({firstName: false, email: false})
+  const [error, setError] = useState(false)
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const handleSubmit = event => {
+    checkValidation();
     event.preventDefault();
     const urlString = new URLSearchParams(window.location.search).get('token');
     const payload = {...details, token: urlString};
     console.log("payload", payload);
-    axios.post(`https://yii-client-uriel-mendoza.dev-conversica.com/dashboard/scandalous/savelead`, { payload })
-    .then(res => {
-      console.log(res);
-    })
-    setDetails({ firstName: '', lastName: '', email: '', phone: ''});
+
+    console.log("error", error);
+  
+    !error && setSubmitSuccess(true);
+    // isComplete && (
+    // axios.post(`https://yii-client-uriel-mendoza.dev-conversica.com/dashboard/scandalous/savelead`, { payload })
+    // .then(res => {
+    //   console.log(res);
+    // })
+    // );
+    !error && setDetails({ firstName: '', lastName: '', email: '', phone: ''});
   }
 
   const checkValidation = () => {
-    details.firstName === '' ? setError({...error, firstName: true}) : setError({...error, firstName: false});
-    details.email === '' ? setError({...error, email: true}) : setError({...error, email: false});
-    const validation = details.firstName !== '' && details.email !== '';
-    setIsComplete(validation)
+    (details.firstName === '' || details.email === '') 
+      ? setError(true)
+      : setError(false)
+    console.log("error", error);
   }
-
-  useEffect(() => {
-    checkValidation();
-  }, [details]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     switch (name) {
       case 'firstName':
-        setDetails({ ...details, firstName: value === '' ? null : value });
+        setDetails({ ...details, firstName: value === '' ? '' : value });
         break;
       case 'lastName':
-          setDetails({ ...details, lastName: value === '' ? null : value });
+          setDetails({ ...details, lastName: value === '' ? '' : value });
           break;
       case 'email':
-        setDetails({ ...details, email: value === '' ? null : value});
+        setDetails({ ...details, email: value === '' ? '' : value});
         break;
       case 'phone':
-        setDetails({ ...details, phone: value === '' ? null : value});
+        setDetails({ ...details, phone: value === '' ? '' : value});
         break;
       default:
         break;
@@ -98,6 +111,7 @@ const App = () => {
                         onChange={handleChange}
                         value={details.firstName}
                     />
+                    {error && <RequiredMessage>*Required</RequiredMessage>}
                     <label htmlFor='lastName'>Last Name: </label>
                     <StyledInput
                         type='text'
@@ -114,6 +128,7 @@ const App = () => {
                         onChange={handleChange}
                         value={details.email}
                     />
+                    {error && <RequiredMessage>*Required</RequiredMessage>}
                     <label htmlFor='phone'>Phone: </label>
                     <StyledInput
                         type='text'
@@ -123,7 +138,8 @@ const App = () => {
                         value={details.phone}
                     />
                 </div>
-                <Button type='submit' disabled={!isComplete}>Register</Button>
+                <Button type='submit'>Register</Button>
+                {(submitSuccess && !error) && <SuccessMessage>Thank you for registering!</SuccessMessage>}
             </form>
         </Container>
   );
