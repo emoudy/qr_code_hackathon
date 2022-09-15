@@ -1,6 +1,7 @@
 import userEvent from '@testing-library/user-event';
 import React,  {useState, useEffect} from 'react';
 import styled from "styled-components";
+import axios from 'axios';
 
 const Container = styled.div`
   border-radius: 5px;
@@ -45,13 +46,18 @@ const App = () => {
   const handleSubmit = event => {
     event.preventDefault();
     const urlString = new URLSearchParams(window.location.search).get('token');
+    const payload = {...details, token: urlString};
+    console.log("payload", payload);
+    axios.post(`https://yii-client-uriel-mendoza.dev-conversica.com/dashboard/scandalous/savelead`, { payload })
+    .then(res => {
+      console.log(res);
+    })
     setDetails({ firstName: '', lastName: '', email: '', phone: ''});
-    console.log({...details, token: urlString})
   }
 
   const checkValidation = () => {
-    details.firstName === '' && setError({...error, firstName: true})
-    details.email === '' && setError({...error, email: true})
+    details.firstName === '' ? setError({...error, firstName: true}) : setError({...error, firstName: false});
+    details.email === '' ? setError({...error, email: true}) : setError({...error, email: false});
     const validation = details.firstName !== '' && details.email !== '';
     setIsComplete(validation)
   }
