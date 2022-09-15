@@ -63,12 +63,12 @@ const App = () => {
     console.log("error", error);
   
     !error && setSubmitSuccess(true);
-    // isComplete && (
-    // axios.post(`https://yii-client-uriel-mendoza.dev-conversica.com/dashboard/scandalous/savelead`, { payload })
-    // .then(res => {
-    //   console.log(res);
-    // })
-    // );
+    isComplete && (
+      axios.post(`https://yii-client-uriel-mendoza.dev-conversica.com/dashboard/scandalous/savelead`, { payload })
+      .then(res => {
+        console.log(res);
+      })
+    );
     !error && setDetails({ firstName: '', lastName: '', email: '', phone: ''});
   }
 
