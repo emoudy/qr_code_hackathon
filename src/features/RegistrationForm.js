@@ -60,12 +60,11 @@ const RegistrationForm = () => {
     axios.post(process.env.REACT_APP_FAKE_URL, { payload })
     .then(res => {
       console.log("payload", payload);
-      if(res.status === 200) {
-        console.log(res);
-        dispatch(showSubmissionMessage());
-      } else {
-        console.log("the call failed")
-      };
+      console.log("res", res);
+      dispatch(showSubmissionMessage());
+    })
+    .catch(error => {
+      console.log(error);
     });
   }
 
