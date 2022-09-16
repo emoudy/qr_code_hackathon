@@ -19,7 +19,7 @@ const RegistrationPage = () => {
           <img 
             src="./conversica-logo.png" 
             alt="Conversica Logo" 
-            style={{ width: "350px", display: "block", marginLeft: "auto", marginRight: "auto" }}
+            style={{ width: "300px", display: "block", marginLeft: "auto", marginRight: "auto" }}
           />
           {!openSuccessfulRegistration ? <RegistrationForm displaySuccessfulRegistration/> : <SuccessfulRegistration/>}
       </Container>
