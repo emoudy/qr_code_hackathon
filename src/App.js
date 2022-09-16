@@ -1,4 +1,3 @@
-import userEvent from '@testing-library/user-event';
 import React,  {useState, useEffect} from 'react';
 import styled from "styled-components";
 import axios from 'axios';
@@ -47,19 +46,16 @@ const SuccessMessage = styled.div `
 
 const App = () => {
   const [details, setDetails] = useState({ firstName: '', lastName: '', email: '', phone: ''});
-  const [error, setError] = useState(false)
+  const [error, setError] = useState({ firstName: true, email: true})
+  const [showErrors, setShowErrors] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false);
-
-  const checkValidation = () => {
-    (details.firstName == '' || details.email == '') 
-      ? setError(true)
-      : setError(false)
-    return details.firstName == '' || details.email == '';
-  }
 
   const handleSubmit = event => {
     event.preventDefault();
-    if(!checkValidation()) {
+    if(error.firstName || error.email) {
+      setShowErrors(true);
+    } else {
+      setShowErrors(false);
       setSubmitSuccess(true);
       sendRequest();
     }
@@ -78,34 +74,22 @@ const App = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    switch (name) {
-      case 'firstName':
-        setDetails({ ...details, firstName: value === '' ? '' : value });
-        break;
-      case 'lastName':
-          setDetails({ ...details, lastName: value === '' ? '' : value });
-          break;
-      case 'email':
-        setDetails({ ...details, email: value === '' ? '' : value});
-        break;
-      case 'phone':
-        setDetails({ ...details, phone: value === '' ? '' : value});
-        break;
-      default:
-        break;
-    }
+    setDetails({ ...details, [name]: value === '' ? '' : value });
+    setError({ ...error, [name]: value === '' ?? false})
   }
 
   useEffect(() => {
-    !error && setDetails({ firstName: '', lastName: '', email: '', phone: ''});
-  }, [error]);
+    submitSuccess && setDetails({ firstName: '', lastName: '', email: '', phone: ''});
+  }, [submitSuccess]);
 
   return (
       <Container>
-          <img src="./conversica-logo.png" alt="Conversica Logo" width="350" />
-          <form className='form' onSubmit={handleSubmit}>
+          <img src="./conversica-logo.png" alt="Conversica Logo" style={{ width: "350px", display: "block", marginLeft: "auto", marginRight: "auto" }} />
+          <form className='form' onSubmit={handleSubmit} style={{ marginTop: "20px" }}>
               <div className='form-control'>
-                  <label htmlFor='firstName'><div>First Name: {error && <RequiredMessage>*Required</RequiredMessage>}</div></label>
+                  <label htmlFor='firstName'>
+                    <div>First Name: {(error.firstName && showErrors) && <RequiredMessage>*Required</RequiredMessage>}</div>
+                  </label>
                   <StyledInput
                       type='text'
                       id='firstName'
@@ -121,7 +105,9 @@ const App = () => {
                       onChange={handleChange}
                       value={details.lastName}
                   />
-                  <label htmlFor='email'><div>Email: {error && <RequiredMessage>*Required</RequiredMessage>}</div></label>
+                  <label htmlFor='email'>
+                    <div>Email: {(error.email && showErrors) && <RequiredMessage>*Required</RequiredMessage>}</div>
+                  </label>
                   <StyledInput
                       type='text'
                       id='email'
@@ -134,12 +120,12 @@ const App = () => {
                       type='text'
                       id='phone'
                       name='phone'
-                      onChange={event => setDetails({...details, phone: event.target.value=== '' ? null : event.target.value})}
+                      onChange={handleChange}
                       value={details.phone}
                   />
               </div>
               <Button type='submit'>Register</Button>
-              {(submitSuccess && !error) && <SuccessMessage>Thank you for registering!</SuccessMessage>}
+              {(submitSuccess) && <SuccessMessage>Thank you for registering!</SuccessMessage>}
           </form>
       </Container>
   );
