@@ -10,7 +10,6 @@ export const submissionSlice = createSlice({
       state.submissionMessage = false;
     },
     showSubmissionMessage: (state) => {
-      console.log("submissionMessage = true");
       state.submissionMessage = true;
     },
   },

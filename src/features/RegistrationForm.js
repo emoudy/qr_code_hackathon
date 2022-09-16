@@ -1,7 +1,7 @@
-import React,  {useState, useEffect} from 'react';
+import React,  {useState, useEffect} from "react";
 import styled from "styled-components";
 import axios from 'axios';
-import { useDispatch } from 'react-redux'
+import { useDispatch } from "react-redux";
 import { showSubmissionMessage } from "../features/submission/submissionSlice";
 
 
@@ -55,17 +55,18 @@ const RegistrationForm = () => {
   const sendRequest = () => {
     const urlString = new URLSearchParams(window.location.search).get('token');
     const payload = {...details, token: urlString};
-    console.log("payload", payload);
     dispatch(showSubmissionMessage());
 
-
-    // axios.post(process.env.REACT_APP_FAKE_URL, { payload })
-    // .then(res => {
-    //   if(res.status === 200) {
-    //     dispatch(showSubmissionMessage());
-    //   }
-    //   console.log(res);
-    // });
+    axios.post(process.env.REACT_APP_FAKE_URL, { payload })
+    .then(res => {
+      console.log("payload", payload);
+      if(res.status === 200) {
+        console.log(res);
+        dispatch(showSubmissionMessage());
+      } else {
+        console.log("the call failed")
+      };
+    });
   }
 
   const handleChange = (e) => {
